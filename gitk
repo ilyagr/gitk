@@ -130,8 +130,10 @@ if {[have_pbcopy]} {
     proc set_clipboard {text} {
         # Using `pbcopy` works around
         # https://core.tcl-lang.org/tk/tktview/e94c8bc845b4d5a658cd5421ef23ef2484560fa8
+        set fd [open "| pbcopy" w]
         # `clipboard append` trims the last newline, so we do too.
-        exec pbcopy << [string trimright $text "\n"]
+        puts $fd [string trimright $text "\n"]
+        close $fd
     }
 } else {
     proc set_clipboard {text} {
