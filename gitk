@@ -853,6 +853,18 @@ proc reloadcommits {} {
     return 0
 }
 
+set periodicupdate_period 2000
+
+proc periodicupdate {} {
+    global periodicupdate_afterid periodicupdate_period
+    if { $periodicupdate_period > 0 } {
+        after 0 updatecommits
+        set periodicupdate_afterid  [after $periodicupdate_period periodicupdate]
+    } else {
+        set periodicupdate_afterid
+    }
+}
+
 # This makes a string representation of a positive integer which
 # sorts as a string in numerical order
 proc strrep {n} {
@@ -12896,6 +12908,8 @@ if {[tk windowingsystem] eq "win32"} {
 set_gui_colors
 
 getcommits {}
+
+periodicupdate
 
 # Local variables:
 # mode: tcl
